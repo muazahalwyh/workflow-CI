@@ -40,7 +40,7 @@ jobs:
       # Run as a mlflow project
       - name: Run mlflow project
         run: |
-          mlflow run . \
+          mlflow run MLProject \
             --env-manager=local \
             -P n_estimators=505 \
             -P max_depth=35 \
