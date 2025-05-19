@@ -1,0 +1,45 @@
+artifact_path: model
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.11.3
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.6.1
+is_signature_from_type_hint: false
+mlflow_version: 2.22.0
+model_size_bytes: 79074677
+model_uuid: 07af34c18d4a47869641af1939f9d5a4
+prompts: null
+run_id: 640010736e6341a6914833f3e082fff2
+saved_input_example_info:
+  artifact_path: input_example.json
+  pandas_orient: split
+  serving_input_path: serving_input_example.json
+  type: dataframe
+signature:
+  inputs: '[{"type": "long", "name": "City", "required": true}, {"type": "long", "name":
+    "Gender", "required": true}, {"type": "long", "name": "Senior Citizen", "required":
+    true}, {"type": "long", "name": "Partner", "required": true}, {"type": "long",
+    "name": "Dependents", "required": true}, {"type": "long", "name": "Tenure Months",
+    "required": true}, {"type": "long", "name": "Phone Service", "required": true},
+    {"type": "long", "name": "Multiple Lines", "required": true}, {"type": "long",
+    "name": "Internet Service", "required": true}, {"type": "long", "name": "Online
+    Security", "required": true}, {"type": "long", "name": "Device Protection", "required":
+    true}, {"type": "long", "name": "Tech Support", "required": true}, {"type": "long",
+    "name": "Streaming TV", "required": true}, {"type": "long", "name": "Contract",
+    "required": true}, {"type": "long", "name": "Paperless Billing", "required": true},
+    {"type": "long", "name": "Payment Method", "required": true}, {"type": "double",
+    "name": "Monthly Charges", "required": true}, {"type": "double", "name": "Total
+    Charges", "required": true}]'
+  outputs: '[{"type": "long", "required": true}]'
+  params: null
+type_hint_from_example: false
+utc_time_created: '2025-05-19 07:58:24.033060'
