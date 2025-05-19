@@ -44,7 +44,7 @@ jobs:
             --env-manager=local \
             -P n_estimators=505 \
             -P max_depth=35 \
-            -P dataset="MLProject/data_bersih_preprocessing.csv"
+            -P dataset="data_bersih_preprocessing.csv"
 
       
       # Save models to GitHub Repository
