@@ -13,8 +13,7 @@ env:
   TARGET_VAR: "Churn Label"
 
 permissions:
-  contents: read
-  packages: write
+  contents: write
 
 jobs:
   build:
