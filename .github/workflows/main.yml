@@ -55,7 +55,7 @@ jobs:
           git add mlruns/
           git commit -m "Save mlruns from CI run"
           git push origin main
-          git push https://x-access-token:${{ secrets.TOKEN_GITHUB }}@github.com/muazahalwyh/workflow-CI.git main
+          git push https://x-access-token:${{ secrets.TOKEN_GITHUB }}@https://github.com/muazahalwyh/workflow-CI main
       
       # Get latest run_id
       - name: Get latest MLflow run_id
