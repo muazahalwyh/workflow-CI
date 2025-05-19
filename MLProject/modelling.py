@@ -4,17 +4,28 @@ import mlflow.sklearn # type: ignore
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 from sklearn.model_selection import train_test_split
-import random
 import numpy as np
 import os
 import warnings
 import sys
+import argparse
 
 if __name__ == "__main__":
     warnings.filterwarnings("ignore")
     np.random.seed(40)
     
-    file_path = sys.argv[3] if len (sys.argv) > 3 else os.path.join(os.path.dirname(os.path.abspath(__file__)), "data_bersih_preprocessing.csv")
+    # file_path = sys.argv[3] if len (sys.argv) > 3 else os.path.join(os.path.dirname(os.path.abspath(__file__)), "data_bersih_preprocessing.csv")
+    # Ambil argumen dari CLI
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--n_estimators", type=int, default=505)
+    parser.add_argument("--max_depth", type=int, default=35)
+    parser.add_argument("--dataset", type=str, default="data_bersih_preprocessing.csv")
+    args = parser.parse_args()
+
+    n_estimators = args.n_estimators
+    max_depth = args.max_depth
+    file_path = args.dataset
+    
     data = pd.read_csv(file_path)
   
     # Split fitur dan target
@@ -30,9 +41,13 @@ if __name__ == "__main__":
     input_example = X_train.iloc[0:5]
 
     with mlflow.start_run():
-        # Set parameter model
-        n_estimators = 505
-        max_depth = 37
+        # # Set parameter model
+        # n_estimators = 505
+        # max_depth = 37
+        
+        # Log parameter manual
+        mlflow.log_param("n_estimators", n_estimators)
+        mlflow.log_param("max_depth", max_depth)
 
         # model Random Forest
         model = RandomForestClassifier(n_estimators=n_estimators, max_depth=max_depth, random_state=42)
@@ -48,10 +63,6 @@ if __name__ == "__main__":
         prec = precision_score(y_test, y_pred)
         rec = recall_score(y_test, y_pred)
         f1 = f1_score(y_test, y_pred)
-
-        # Log parameter manual
-        mlflow.log_param("n_estimators", n_estimators)
-        mlflow.log_param("max_depth", max_depth)
 
         # Log metrik manual
         mlflow.log_metric("accuracy", acc)
