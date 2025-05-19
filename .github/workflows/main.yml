@@ -18,7 +18,7 @@ jobs:
 
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v2
 
       # Setup Python 3.11.3
       - name: Set up Python 3.11.3
