@@ -5,3 +5,6 @@ deactivate
 
 pip install -r requirements.txt
 
+
+
+docker login -u luna256
