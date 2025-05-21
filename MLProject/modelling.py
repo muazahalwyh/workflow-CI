@@ -15,13 +15,13 @@ if __name__ == "__main__":
     np.random.seed(40)
     
     base_dir = os.path.dirname(os.path.abspath(__file__))
-    default_path = os.path.join(base_dir, "MLProject/data_bersih_preprocessing.csv")
+    default_path = os.path.join(base_dir, "data_bersih_preprocessing.csv")
 
     # Ambil argumen dari CLI
     parser = argparse.ArgumentParser()
     parser.add_argument("--n_estimators", type=int, default=505)
     parser.add_argument("--max_depth", type=int, default=35)
-    parser.add_argument("--dataset", type=str, default="MLProject/data_bersih_preprocessing.csv")
+    parser.add_argument("--dataset", type=str, default="data_bersih_preprocessing.csv")
     args = parser.parse_args()
 
     n_estimators = args.n_estimators

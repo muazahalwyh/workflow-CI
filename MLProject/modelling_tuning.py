@@ -10,7 +10,7 @@ mlflow.set_tracking_uri("https://dagshub.com/muazahalwyh/my-first-repo.mlflow")
 mlflow.set_experiment("Experiment Customer Churn")
 
 # Load data
-data = pd.read_csv("MLProject/data_bersih_preprocessing.csv")
+data = pd.read_csv("data_bersih_preprocessing.csv")
 X = data.drop("Churn Label", axis=1)
 y = data["Churn Label"]
 
