@@ -4,12 +4,13 @@ import mlflow.sklearn # type: ignore
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 import numpy as np
+import joblib
 
 mlflow.set_tracking_uri("https://dagshub.com/muazahalwyh/my-first-repo.mlflow")
 mlflow.set_experiment("Experiment Customer Churn")
 
 # Load data
-data = pd.read_csv("Dataset/data_bersih_preprocessing.csv")
+data = pd.read_csv("MLProject/data_bersih_preprocessing.csv")
 X = data.drop("Churn Label", axis=1)
 y = data["Churn Label"]
 
@@ -22,6 +23,7 @@ max_depth_range = np.linspace(5, 50, 5, dtype=int)
 
 best_accuracy = 0
 best_params = {}
+best_model = None
 
 for n_estimators in n_estimators_range:
     for max_depth in max_depth_range:
@@ -42,12 +44,16 @@ for n_estimators in n_estimators_range:
                     "n_estimators": n_estimators,
                     "max_depth": max_depth
                 }
+                best_model = model
 
                 mlflow.sklearn.log_model(
                     sk_model=model,
                     artifact_path="best_model",
                     input_example=input_example
                 )
+
+joblib.dump(best_model, "best_model.pkl")
+print("Model terbaik disimpan sebagai best_model.pkl")
 
 print("Tuning selesai.")
 print(f"Model terbaik: {best_params}, Akurasi: {best_accuracy:.4f}")
