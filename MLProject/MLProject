@@ -16,7 +16,7 @@ entry_points:
 
   tuning:
     parameters:
-      dataset : {type: string, default: "MLProject/data_bersih_preprocessing.csv"}
+      dataset : {type: string, default: "data_bersih_preprocessing.csv"}
     command: >
       python modelling_tuning.py
       --dataset {dataset}
