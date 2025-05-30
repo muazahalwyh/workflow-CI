@@ -1,6 +1,6 @@
 import pandas as pd
-import mlflow # type: ignore
-import mlflow.sklearn # type: ignore
+import mlflow
+import mlflow.sklearn
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 import numpy as np
@@ -9,9 +9,20 @@ import argparse
 import joblib
 import os
 
-def train_and_log(X_train, y_train, X_test, y_test, n_estimators, max_depth, input_example):
-    mlflow.log_param("n_estimators", n_estimators)
-    mlflow.log_param("max_depth", max_depth)
+def main(n_estimators: int, max_depth: int, dataset_dir: str):
+    warnings.filterwarnings("ignore")
+    np.random.seed(42)
+
+    # Load dataset
+    X_train = pd.read_csv(os.path.join(dataset_dir, "X_train_resampled.csv"))
+    y_train = pd.read_csv(os.path.join(dataset_dir, "y_train_resampled.csv")).squeeze()
+    X_test = pd.read_csv(os.path.join(dataset_dir, "X_test.csv"))
+    y_test = pd.read_csv(os.path.join(dataset_dir, "y_test.csv")).squeeze()
+
+    mlflow.set_experiment("Customer Churn")
+
+    # Optional autolog (tidak perlu start_run)
+    mlflow.sklearn.autolog()
 
     model = RandomForestClassifier(n_estimators=n_estimators, max_depth=max_depth, random_state=42)
     model.fit(X_train, y_train)
@@ -28,27 +39,10 @@ def train_and_log(X_train, y_train, X_test, y_test, n_estimators, max_depth, inp
     mlflow.log_metric("recall", rec)
     mlflow.log_metric("f1_score", f1)
 
+    input_example = X_train.iloc[:5]
+    # Manual log model agar model bisa diakses untuk build docker
     mlflow.sklearn.log_model(model, artifact_path="model", input_example=input_example)
     joblib.dump(model, "model.pkl")
-
-def main(n_estimators: int, max_depth: int, dataset_dir: str):
-    warnings.filterwarnings("ignore")
-    np.random.seed(42)
-
-    # Load dataset
-    X_train = pd.read_csv(os.path.join(dataset_dir, "X_train_resampled.csv"))
-    y_train = pd.read_csv(os.path.join(dataset_dir, "y_train_resampled.csv")).squeeze()
-    X_test = pd.read_csv(os.path.join(dataset_dir, "X_test.csv"))
-    y_test = pd.read_csv(os.path.join(dataset_dir, "y_test.csv")).squeeze()
-
-    mlflow.set_experiment("Customer Churn")
-    input_example = X_train.iloc[:5]
-
-    if mlflow.active_run() is None:
-        with mlflow.start_run():
-            train_and_log(X_train, y_train, X_test, y_test, n_estimators, max_depth, input_example)
-    else:
-        train_and_log(X_train, y_train, X_test, y_test, n_estimators, max_depth, input_example)
 
     print("Training selesai. Model disimpan sebagai model.pkl")
 
