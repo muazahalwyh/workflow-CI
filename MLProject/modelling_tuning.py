@@ -52,16 +52,16 @@ def main(dataset_dir: str):
     f1 = f1_score(y_test, y_pred, average='weighted')
 
     # Log hasil tuning ke MLflow
-    with mlflow.start_run():
-        mlflow.log_params(best_params)
-        mlflow.log_metric("test_accuracy", acc)
-        mlflow.log_metric("test_precision", prec)
-        mlflow.log_metric("test_recall", rec)
-        mlflow.log_metric("test_f1", f1)
+    # with mlflow.start_run():
+    mlflow.log_params(best_params)
+    mlflow.log_metric("test_accuracy", acc)
+    mlflow.log_metric("test_precision", prec)
+    mlflow.log_metric("test_recall", rec)
+    mlflow.log_metric("test_f1", f1)
 
-        mlflow.sklearn.log_model(best_model, artifact_path="best_model")
+    mlflow.sklearn.log_model(best_model, artifact_path="best_model")
 
-        joblib.dump(best_model, "best_model.pkl")
+    joblib.dump(best_model, "best_model.pkl")
 
     print(f"Best params: {best_params}")
     print(f"Test Accuracy: {acc:.4f}")
