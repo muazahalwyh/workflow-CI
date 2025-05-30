@@ -1,6 +1,6 @@
 import pandas as pd
-import mlflow
-import mlflow.sklearn
+import mlflow # type: ignore
+import mlflow.sklearn # type: ignore
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 import numpy as np
@@ -13,36 +13,43 @@ def main(n_estimators: int, max_depth: int, dataset_dir: str):
     warnings.filterwarnings("ignore")
     np.random.seed(42)
 
-    # Load dataset
+    # Load dataset dari folder Dataset/
     X_train = pd.read_csv(os.path.join(dataset_dir, "X_train_resampled.csv"))
     y_train = pd.read_csv(os.path.join(dataset_dir, "y_train_resampled.csv")).squeeze()
     X_test = pd.read_csv(os.path.join(dataset_dir, "X_test.csv"))
     y_test = pd.read_csv(os.path.join(dataset_dir, "y_test.csv")).squeeze()
 
+    # Logging MLflow
     mlflow.set_experiment("Customer Churn")
 
-    # Optional autolog (tidak perlu start_run)
-    mlflow.sklearn.autolog()
-
-    model = RandomForestClassifier(n_estimators=n_estimators, max_depth=max_depth, random_state=42)
-    model.fit(X_train, y_train)
-
-    y_pred = model.predict(X_test)
-
-    acc = accuracy_score(y_test, y_pred)
-    prec = precision_score(y_test, y_pred, average='weighted')
-    rec = recall_score(y_test, y_pred, average='weighted')
-    f1 = f1_score(y_test, y_pred, average='weighted')
-
-    mlflow.log_metric("accuracy", acc)
-    mlflow.log_metric("precision", prec)
-    mlflow.log_metric("recall", rec)
-    mlflow.log_metric("f1_score", f1)
-
     input_example = X_train.iloc[:5]
-    # Manual log model agar model bisa diakses untuk build docker
-    mlflow.sklearn.log_model(model, artifact_path="model", input_example=input_example)
-    joblib.dump(model, "model.pkl")
+    
+    with mlflow.start_run():
+        # # Set parameter model
+        # n_estimators = 505
+        # max_depth = 37
+        
+        # Log parameter manual
+        mlflow.log_param("n_estimators", n_estimators)
+        mlflow.log_param("max_depth", max_depth)
+
+        model = RandomForestClassifier(n_estimators=n_estimators, max_depth=max_depth, random_state=42)
+        model.fit(X_train, y_train)
+
+        y_pred = model.predict(X_test)
+
+        acc = accuracy_score(y_test, y_pred)
+        prec = precision_score(y_test, y_pred, average='weighted')
+        rec = recall_score(y_test, y_pred, average='weighted')
+        f1 = f1_score(y_test, y_pred, average='weighted')
+
+        mlflow.log_metric("accuracy", acc)
+        mlflow.log_metric("precision", prec)
+        mlflow.log_metric("recall", rec)
+        mlflow.log_metric("f1_score", f1)
+
+        mlflow.sklearn.log_model(model, artifact_path="model", input_example=input_example)
+        joblib.dump(model, "model.pkl")
 
     print("Training selesai. Model disimpan sebagai model.pkl")
 
