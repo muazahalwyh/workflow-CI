@@ -16,8 +16,8 @@ def main(n_estimators: int, max_depth: int, dataset_dir: str):
     # Load dataset dari folder Dataset/
     X_train = pd.read_csv(os.path.join(dataset_dir, "Dataset/X_train_resampled.csv"))
     y_train = pd.read_csv(os.path.join(dataset_dir, "Dataset/y_train_resampled.csv")).squeeze()
-    X_test = pd.read_csv(os.path.join(dataset_dir, "DatasetX_test.csv"))
-    y_test = pd.read_csv(os.path.join(dataset_dir, "Datasety_test.csv")).squeeze()
+    X_test = pd.read_csv(os.path.join(dataset_dir, "Dataset/X_test.csv"))
+    y_test = pd.read_csv(os.path.join(dataset_dir, "Dataset/y_test.csv")).squeeze()
 
     # Logging MLflow
     mlflow.set_experiment("Customer Churn")
