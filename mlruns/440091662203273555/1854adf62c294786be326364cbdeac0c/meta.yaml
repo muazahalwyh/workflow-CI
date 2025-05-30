@@ -1,0 +1,15 @@
+artifact_uri: file:///home/runner/work/workflow-CI/workflow-CI/mlruns/440091662203273555/1854adf62c294786be326364cbdeac0c/artifacts
+end_time: 1748626654967
+entry_point_name: ''
+experiment_id: '440091662203273555'
+lifecycle_stage: active
+run_id: 1854adf62c294786be326364cbdeac0c
+run_name: fearless-fish-192
+run_uuid: 1854adf62c294786be326364cbdeac0c
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748626650881
+status: 3
+tags: []
+user_id: runner
