@@ -7,7 +7,7 @@ entry_points:
     parameters:
       n_estimators: {type: int, default: 505}
       max_depth: {type: int, default: 35}
-      dataset : {type: string, default: "Dataset"}
+      dataset_dir : {type: string, default: "Dataset"}
     command: >
       python modelling.py
       --n_estimators {n_estimators}
@@ -16,7 +16,7 @@ entry_points:
 
   tuning:
     parameters:
-      dataset : {type: string, default: "Dataset"}
+      dataset_dir : {type: string, default: "Dataset"}
     command: >
       python modelling_tuning.py
       --dataset_dir {dataset_dir}
