@@ -1,0 +1,15 @@
+artifact_uri: file:///home/runner/work/workflow-CI/workflow-CI/mlruns/0/8d079f16097442ac9744766bc8c92a32/artifacts
+end_time: 1748628960310
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 8d079f16097442ac9744766bc8c92a32
+run_name: angry-pig-786
+run_uuid: 8d079f16097442ac9744766bc8c92a32
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748628948887
+status: 3
+tags: []
+user_id: runner

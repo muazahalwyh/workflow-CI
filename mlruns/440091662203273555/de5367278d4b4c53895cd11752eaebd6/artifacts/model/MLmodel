@@ -1,0 +1,45 @@
+artifact_path: model
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.11.3
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.6.1
+is_signature_from_type_hint: false
+mlflow_version: 2.22.0
+model_size_bytes: 99199911
+model_uuid: 55f58152f932403bba94f5e8a66fbbf6
+prompts: null
+run_id: de5367278d4b4c53895cd11752eaebd6
+saved_input_example_info:
+  artifact_path: input_example.json
+  pandas_orient: split
+  serving_input_path: serving_input_example.json
+  type: dataframe
+signature:
+  inputs: '[{"type": "double", "name": "City", "required": true}, {"type": "double",
+    "name": "Gender", "required": true}, {"type": "double", "name": "Senior Citizen",
+    "required": true}, {"type": "double", "name": "Partner", "required": true}, {"type":
+    "double", "name": "Dependents", "required": true}, {"type": "double", "name":
+    "Tenure Months", "required": true}, {"type": "double", "name": "Phone Service",
+    "required": true}, {"type": "double", "name": "Multiple Lines", "required": true},
+    {"type": "double", "name": "Internet Service", "required": true}, {"type": "double",
+    "name": "Online Security", "required": true}, {"type": "double", "name": "Device
+    Protection", "required": true}, {"type": "double", "name": "Tech Support", "required":
+    true}, {"type": "double", "name": "Streaming TV", "required": true}, {"type":
+    "double", "name": "Contract", "required": true}, {"type": "double", "name": "Paperless
+    Billing", "required": true}, {"type": "double", "name": "Payment Method", "required":
+    true}, {"type": "double", "name": "Monthly Charges", "required": true}, {"type":
+    "double", "name": "Total Charges", "required": true}]'
+  outputs: '[{"type": "long", "required": true}]'
+  params: null
+type_hint_from_example: false
+utc_time_created: '2025-05-30 18:15:56.111092'

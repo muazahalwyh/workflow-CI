@@ -1,0 +1,15 @@
+artifact_uri: file:///home/runner/work/workflow-CI/workflow-CI/mlruns/440091662203273555/de5367278d4b4c53895cd11752eaebd6/artifacts
+end_time: 1748628959882
+entry_point_name: ''
+experiment_id: '440091662203273555'
+lifecycle_stage: active
+run_id: de5367278d4b4c53895cd11752eaebd6
+run_name: intrigued-pig-33
+run_uuid: de5367278d4b4c53895cd11752eaebd6
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748628956103
+status: 3
+tags: []
+user_id: runner
