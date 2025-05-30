@@ -2,58 +2,78 @@ import pandas as pd
 import mlflow # type: ignore
 import mlflow.sklearn # type: ignore
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+from sklearn.model_selection import GridSearchCV
 import numpy as np
+import warnings
+import os
 import joblib
 
-mlflow.set_tracking_uri("https://dagshub.com/muazahalwyh/my-first-repo.mlflow")
-mlflow.set_experiment("Experiment Customer Churn")
+def main(dataset_dir: str):
+    warnings.filterwarnings("ignore")
+    np.random.seed(42)
 
-# Load data
-data = pd.read_csv("data_bersih_preprocessing.csv")
-X = data.drop("Churn Label", axis=1)
-y = data["Churn Label"]
+    # Load data
+    X_train = pd.read_csv(os.path.join(dataset_dir, "X_train_resampled.csv"))
+    y_train = pd.read_csv(os.path.join(dataset_dir, "y_train_resampled.csv")).squeeze()
+    X_test = pd.read_csv(os.path.join(dataset_dir, "X_test.csv"))
+    y_test = pd.read_csv(os.path.join(dataset_dir, "y_test.csv")).squeeze()
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-input_example = X_train.iloc[0:5]
+    # Set MLflow experiment
+    mlflow.set_experiment("Customer Churn Hyperparameter Tuning")
 
-# Range hyperparameter
-n_estimators_range = np.linspace(100, 1000, 5, dtype=int)
-max_depth_range = np.linspace(5, 50, 5, dtype=int)
+    # Parameter grid untuk tuning
+    param_grid = {
+        'n_estimators': [100, 300, 500],
+        'max_depth': [10, 20, 30, None]
+    }
 
-best_accuracy = 0
-best_params = {}
-best_model = None
+    rf = RandomForestClassifier(random_state=42)
 
-for n_estimators in n_estimators_range:
-    for max_depth in max_depth_range:
-        with mlflow.start_run(run_name=f"Tuning_{n_estimators}_{max_depth}"):
-            mlflow.autolog()  # otomatis log param, metric, model
+    grid_search = GridSearchCV(
+        estimator=rf,
+        param_grid=param_grid,
+        cv=3,
+        scoring='accuracy',
+        verbose=1,
+        n_jobs=-1
+    )
 
-            model = RandomForestClassifier(n_estimators=n_estimators, max_depth=max_depth, random_state=42)
-            model.fit(X_train, y_train)
-            acc = model.score(X_test, y_test)
+    grid_search.fit(X_train, y_train)
 
-            # log metrik akurasi tambahan
-            mlflow.log_metric("accuracy_manual", acc)
+    best_params = grid_search.best_params_
+    best_model = grid_search.best_estimator_
 
-            # Simpan model terbaik
-            if acc > best_accuracy:
-                best_accuracy = acc
-                best_params = {
-                    "n_estimators": n_estimators,
-                    "max_depth": max_depth
-                }
-                best_model = model
+    # Evaluasi di test set
+    y_pred = best_model.predict(X_test)
+    acc = accuracy_score(y_test, y_pred)
+    prec = precision_score(y_test, y_pred, average='weighted')
+    rec = recall_score(y_test, y_pred, average='weighted')
+    f1 = f1_score(y_test, y_pred, average='weighted')
 
-                mlflow.sklearn.log_model(
-                    sk_model=model,
-                    artifact_path="best_model",
-                    input_example=input_example
-                )
+    # Log hasil tuning ke MLflow
+    with mlflow.start_run():
+        mlflow.log_params(best_params)
+        mlflow.log_metric("test_accuracy", acc)
+        mlflow.log_metric("test_precision", prec)
+        mlflow.log_metric("test_recall", rec)
+        mlflow.log_metric("test_f1", f1)
 
-joblib.dump(best_model, "best_model.pkl")
-print("Model terbaik disimpan sebagai best_model.pkl")
+        mlflow.sklearn.log_model(best_model, artifact_path="best_model")
 
-print("Tuning selesai.")
-print(f"Model terbaik: {best_params}, Akurasi: {best_accuracy:.4f}")
+        joblib.dump(best_model, "best_model.pkl")
+
+    print(f"Best params: {best_params}")
+    print(f"Test Accuracy: {acc:.4f}")
+    print(f"Test Precision: {prec:.4f}")
+    print(f"Test Recall: {rec:.4f}")
+    print(f"Test F1 Score: {f1:.4f}")
+    print("Model tuning selesai dan disimpan sebagai best_model.pkl")
+
+if __name__ == "__main__":
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--dataset_dir", type=str, default="Dataset")
+    args = parser.parse_args()
+
+    main(args.dataset_dir)

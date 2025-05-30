@@ -44,7 +44,12 @@ jobs:
       - name: Run mlflow project
         run: |
           mlflow run MLProject --env-manager=local 
- 
+    
+      # # Run MLflow tuning entry point
+      # - name: Run mlflow tuning
+      #   run: |
+      #     mlflow run MLProject -e tuning --env-manager=local
+
       # Save models to GitHub Repository
       - name: Save mlruns to repo
         run: |
@@ -77,9 +82,9 @@ jobs:
       # Tag the Docker image
       - name: Tag Docker Image
         run: |
-          docker tag cc ${{ secrets.DOCKER_HUB_USERNAME }}/cc:latest
+          docker tag ci_churn ${{ secrets.DOCKER_HUB_USERNAME }}/ci_churn:latest
 
       # Push Docker image to Docker Hub
       - name: Push Docker Image
         run: |
-          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/cc:latest
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/ci_churn:latest

@@ -1,1 +1,3 @@
-https://hub.docker.com/repository/docker/luna256/cc
+https://hub.docker.com/repository/docker/luna256/cc -> Lama
+
+https://hub.docker.com/repository/docker/luna256/ci_churn/general -> Baru
