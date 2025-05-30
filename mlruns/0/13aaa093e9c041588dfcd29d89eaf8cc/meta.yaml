@@ -1,0 +1,15 @@
+artifact_uri: file:///home/runner/work/workflow-CI/workflow-CI/mlruns/0/13aaa093e9c041588dfcd29d89eaf8cc/artifacts
+end_time: 1748648355533
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 13aaa093e9c041588dfcd29d89eaf8cc
+run_name: auspicious-crane-496
+run_uuid: 13aaa093e9c041588dfcd29d89eaf8cc
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1748648346019
+status: 3
+tags: []
+user_id: runner
