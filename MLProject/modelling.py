@@ -24,26 +24,26 @@ def main(n_estimators: int, max_depth: int, dataset_dir: str):
 
     input_example = X_train.iloc[:5]
     
-    # with mlflow.start_run():
-    mlflow.autolog()
+    with mlflow.start_run():
+        # mlflow.autolog()
 
-    model = RandomForestClassifier(n_estimators=n_estimators, max_depth=max_depth, random_state=42)
-    model.fit(X_train, y_train)
+        model = RandomForestClassifier(n_estimators=n_estimators, max_depth=max_depth, random_state=42)
+        model.fit(X_train, y_train)
 
-    y_pred = model.predict(X_test)
+        y_pred = model.predict(X_test)
 
-    acc = accuracy_score(y_test, y_pred)
-    prec = precision_score(y_test, y_pred, average='weighted')
-    rec = recall_score(y_test, y_pred, average='weighted')
-    f1 = f1_score(y_test, y_pred, average='weighted')
+        acc = accuracy_score(y_test, y_pred)
+        prec = precision_score(y_test, y_pred, average='weighted')
+        rec = recall_score(y_test, y_pred, average='weighted')
+        f1 = f1_score(y_test, y_pred, average='weighted')
 
-    mlflow.log_metric("accuracy", acc)
-    mlflow.log_metric("precision", prec)
-    mlflow.log_metric("recall", rec)
-    mlflow.log_metric("f1_score", f1)
+        mlflow.log_metric("accuracy", acc)
+        mlflow.log_metric("precision", prec)
+        mlflow.log_metric("recall", rec)
+        mlflow.log_metric("f1_score", f1)
 
-    mlflow.sklearn.log_model(model, artifact_path="model", input_example=input_example)
-    joblib.dump(model, "model.pkl")
+        mlflow.sklearn.log_model(model, artifact_path="model", input_example=input_example)
+        joblib.dump(model, "model.pkl")
 
     print("Training selesai. Model disimpan sebagai model.pkl")
 
