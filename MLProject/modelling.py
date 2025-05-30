@@ -9,42 +9,46 @@ import argparse
 import joblib
 import os
 
+def train_and_log(X_train, y_train, X_test, y_test, n_estimators, max_depth, input_example):
+    mlflow.log_param("n_estimators", n_estimators)
+    mlflow.log_param("max_depth", max_depth)
+
+    model = RandomForestClassifier(n_estimators=n_estimators, max_depth=max_depth, random_state=42)
+    model.fit(X_train, y_train)
+
+    y_pred = model.predict(X_test)
+
+    acc = accuracy_score(y_test, y_pred)
+    prec = precision_score(y_test, y_pred, average='weighted')
+    rec = recall_score(y_test, y_pred, average='weighted')
+    f1 = f1_score(y_test, y_pred, average='weighted')
+
+    mlflow.log_metric("accuracy", acc)
+    mlflow.log_metric("precision", prec)
+    mlflow.log_metric("recall", rec)
+    mlflow.log_metric("f1_score", f1)
+
+    mlflow.sklearn.log_model(model, artifact_path="model", input_example=input_example)
+    joblib.dump(model, "model.pkl")
+
 def main(n_estimators: int, max_depth: int, dataset_dir: str):
     warnings.filterwarnings("ignore")
     np.random.seed(42)
 
-    # Load dataset dari folder Dataset/
+    # Load dataset
     X_train = pd.read_csv(os.path.join(dataset_dir, "X_train_resampled.csv"))
     y_train = pd.read_csv(os.path.join(dataset_dir, "y_train_resampled.csv")).squeeze()
     X_test = pd.read_csv(os.path.join(dataset_dir, "X_test.csv"))
     y_test = pd.read_csv(os.path.join(dataset_dir, "y_test.csv")).squeeze()
 
-    # Logging MLflow
     mlflow.set_experiment("Customer Churn")
-
     input_example = X_train.iloc[:5]
-    
-    with mlflow.start_run():
-        mlflow.log_param("n_estimators", n_estimators)
-        mlflow.log_param("max_depth", max_depth)
 
-        model = RandomForestClassifier(n_estimators=n_estimators, max_depth=max_depth, random_state=42)
-        model.fit(X_train, y_train)
-
-        y_pred = model.predict(X_test)
-
-        acc = accuracy_score(y_test, y_pred)
-        prec = precision_score(y_test, y_pred, average='weighted')
-        rec = recall_score(y_test, y_pred, average='weighted')
-        f1 = f1_score(y_test, y_pred, average='weighted')
-
-        mlflow.log_metric("accuracy", acc)
-        mlflow.log_metric("precision", prec)
-        mlflow.log_metric("recall", rec)
-        mlflow.log_metric("f1_score", f1)
-
-        mlflow.sklearn.log_model(model, artifact_path="model", input_example=input_example)
-        joblib.dump(model, "model.pkl")
+    if mlflow.active_run() is None:
+        with mlflow.start_run():
+            train_and_log(X_train, y_train, X_test, y_test, n_estimators, max_depth, input_example)
+    else:
+        train_and_log(X_train, y_train, X_test, y_test, n_estimators, max_depth, input_example)
 
     print("Training selesai. Model disimpan sebagai model.pkl")
 
