@@ -24,14 +24,8 @@ def main(n_estimators: int, max_depth: int, dataset_dir: str):
 
     input_example = X_train.iloc[:5]
     
-    with mlflow.start_run():
-        # # Set parameter model
-        # n_estimators = 505
-        # max_depth = 37
-        
-        # Log parameter manual
-        mlflow.log_param("n_estimators", n_estimators)
-        mlflow.log_param("max_depth", max_depth)
+    with mlflow.start_run(nested=True):
+        mlflow.autolog()
 
         model = RandomForestClassifier(n_estimators=n_estimators, max_depth=max_depth, random_state=42)
         model.fit(X_train, y_train)
