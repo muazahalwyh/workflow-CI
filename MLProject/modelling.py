@@ -111,7 +111,7 @@ if __name__ == "__main__":
 
 #     input_example = X_train.iloc[:5]
     
-#     with mlflow.start_run(nested=True):
+#     with mlflow.start_run():
 #         mlflow.autolog()
 
 #         model = RandomForestClassifier(n_estimators=n_estimators, max_depth=max_depth, random_state=42)
